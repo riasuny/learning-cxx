@@ -1,5 +1,5 @@
 #include "../exercise.h"
-
+#include<iostream>
 struct Fibonacci {
     int numbers[11];
     // TODO: 修改方法签名和实现，使测试通过
