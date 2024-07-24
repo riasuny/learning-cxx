@@ -1,5 +1,5 @@
 #include "../exercise.h"
-
+#include<iostream>
 // READ: Trivial type <https://learn.microsoft.com/zh-cn/cpp/cpp/trivial-standard-layout-and-pod-types?view=msvc-170>
 
 struct FibonacciCache {
