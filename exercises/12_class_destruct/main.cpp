@@ -1,4 +1,6 @@
 #include<iostream>
+#include <cassert> // 引入 assert 头文件
+#define ASSERT(condition, message) assert(condition && message)
 // READ: 析构函数 <https://zh.cppreference.com/w/cpp/language/destructor>
 
 /// @brief 任意缓存容量的斐波那契类型。

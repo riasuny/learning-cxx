@@ -1,5 +1,7 @@
 #include "../exercise.h"
 #include<iostream>
+#include <cassert> // 引入 assert 头文件
+#define ASSERT(condition, message) assert(condition && message)
 struct Fibonacci {
     int numbers[11];
     // TODO: 修改方法签名和实现，使测试通过
