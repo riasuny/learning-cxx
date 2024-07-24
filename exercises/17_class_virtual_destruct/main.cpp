@@ -5,7 +5,7 @@
 
 struct A {
     // TODO: 正确初始化静态字段
-    static int num_a = 0;
+    static int num_a;
 
     A() {
         ++num_a;
@@ -18,9 +18,10 @@ struct A {
         return 'A';
     }
 };
+int A::num_a=0;
 struct B final : public A {
     // TODO: 正确初始化静态字段
-    static int num_b = 0;
+    static int num_b;
 
     B() {
         ++num_b;
@@ -33,7 +34,7 @@ struct B final : public A {
         return 'B';
     }
 };
-
+int B::num_b=0;
 int main(int argc, char **argv) {
     auto a = new A;
     auto b = new B;
