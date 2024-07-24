@@ -11,7 +11,7 @@ class DynFibonacci {
 
 public:
     // TODO: 实现动态设置容量的构造器
-    DynFibonacci(int capacity) : cache(new size_t[capacity]), cached(0) {
+    DynFibonacci(int capacity) noexcept: cache(new size_t[capacity]), cached(0) {
         if (capacity > 0)
         {
             cache[0] = 0;
@@ -25,20 +25,19 @@ public:
     }
 
     // TODO: 实现移动构造器
-    DynFibonacci(DynFibonacci const& other) :cache(new size_t[other.cached]), cached(other.cached)
+    DynFibonacci(DynFibonacci && other) noexcept:cache(other.cache), cached(other.cached)
     {
-        for (int i = 0;i < cached;++i)
-        {
-            cache[i] = other.cache[i];
-        }
+        other.cache = nullptr;
+        other.cached = 0;
     }
     // TODO: 实现移动赋值
-    // NOTICE: ⚠ 注意移动到自身问题 ⚠
-    DynFibonacci& operator=(DynFibonacci&& other) : cache(new size_t[other.cached]), cached(other.cached)
-    {
-        for (int i = 0;i < cached;++i)
-        {
-            cache[i] = other.cache[i];
+    DynFibonacci& operator=(DynFibonacci&& other) noexcept {
+        if (this != &other) {
+            delete[] cache;
+            cache = other.cache;
+            cached = other.cached;
+            other.cache = nullptr;
+            other.cached = 0;
         }
         return *this;
     }
@@ -46,17 +45,20 @@ public:
     // TODO: 实现析构器，释放缓存空间
     ~DynFibonacci()
     {
-        delete[] ache;
+        delete[] cache;
     }
 
     // TODO: 实现正确的缓存优化斐波那契计算
     size_t operator[](int i) {
         for (; cached <= i; ++cached) {
-            cache[cached] = cache[cached - 1] + cache[cached - 2];
+            if (cached < 2) {
+                cache[cached] = cached; // 前两个斐波那契数直接初始化为索引值
+            } else {
+                cache[cached] = cache[cached - 1] + cache[cached - 2];
+            }
         }
         return cache[i];
     }
-
     // NOTICE: 不要修改这个方法
     bool is_alive() const {
         return cache;
@@ -69,7 +71,7 @@ int main(int argc, char** argv) {
 
     DynFibonacci const fib_ = std::move(fib);
     ASSERT(!fib.is_alive(), "Object moved");
-    ASSERT(fib_[10] == 55, "fibonacci(10) should be 55");
+    ASSERT(fib[10] == 55, "fibonacci(10) should be 55");
 
     DynFibonacci fib0(6);
     DynFibonacci fib1(12);
