@@ -1,7 +1,5 @@
 ﻿#include "../exercise.h"
-
 // READ: 类模板 <https://zh.cppreference.com/w/cpp/language/class_template>
-
 template<class T>
 struct Tensor4D {
     unsigned int shape[4];
@@ -10,6 +8,10 @@ struct Tensor4D {
     Tensor4D(unsigned int const shape_[4], T const *data_) {
         unsigned int size = 1;
         // TODO: 填入正确的 shape 并计算 size
+        for(int i=0;i<4;i++)
+        {
+            shape[i]=shape_[i];
+        }
         data = new T[size];
         std::memcpy(data, data_, size * sizeof(T));
     }
@@ -27,7 +29,28 @@ struct Tensor4D {
     // 例如，`this` 形状为 `[1, 2, 3, 4]`，`others` 形状为 `[1, 2, 1, 4]`，
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
-        // TODO: 实现单向广播的加法
+        for (int i = 0; i < 4; ++i) {
+            if (shape[i] != others.shape[i]) {
+                if (shape[i] != 1 && others.shape[i] != 1) {
+                    throw std::invalid_argument("Shapes are not broadcastable for += operation.");
+                }
+                // Perform broadcasting
+                unsigned int dim_size = std::max(shape[i], others.shape[i]);
+                unsigned int this_stride = shape[i] == 1 ? 0 : 1;
+                unsigned int others_stride = others.shape[i] == 1 ? 0 : 1;
+
+                for (unsigned int j = 0; j < dim_size; ++j) {
+                    unsigned int this_idx = (j * this_stride) % shape[i];
+                    unsigned int others_idx = (j * others_stride) % others.shape[i];
+                    data[i * shape[0] * shape[1] * shape[2] + this_idx] += others.data[i * others.shape[0] * others.shape[1] * others.shape[2] + others_idx];
+                }
+            } else {
+                // Dimensions are compatible, perform normal addition
+                for (unsigned int j = 0; j < shape[i]; ++j) {
+                    data[i * shape[0] * shape[1] * shape[2] + j] += others.data[i * others.shape[0] * others.shape[1] * others.shape[2] + j];
+                }
+            }
+        }
         return *this;
     }
 };
