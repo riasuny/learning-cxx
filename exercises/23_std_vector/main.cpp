@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
             vec.clear();
             ASSERT(vec.empty(), "`vec` is empty now.");
             ASSERT(vec.size() == 0, "Fill in the correct value.");
-            ASSERT(vec.capacity() == 0, "Fill in the correct value.");
+            ASSERT(vec.capacity() == 5, "Fill in the correct value.");
         }
     }
     {
