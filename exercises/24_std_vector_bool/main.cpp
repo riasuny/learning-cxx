@@ -1,16 +1,17 @@
-﻿#include "../exercise.h"
+﻿#include<iostream>
 #include <vector>
-
+#include <cassert> // 引入 assert 头文件
+#define ASSERT(condition, message) assert(condition && message)
 // READ: std::vector <https://zh.cppreference.com/w/cpp/container/vector_bool>
 // READ: 模板特化 <https://zh.cppreference.com/w/cpp/language/template_specialization>
 
 // TODO: 将下列 `?` 替换为正确的代码
-int main(int argc, char **argv) {
-    std::vector<bool> vec(100,true);// TODO: 正确调用构造函数
+int main(int argc, char** argv) {
+    std::vector<bool> vec(100, true);// TODO: 正确调用构造函数
     ASSERT(vec[0], "Make this assertion pass.");
     ASSERT(vec[99], "Make this assertion pass.");
     ASSERT(vec.size() == 100, "Make this assertion pass.");
-    ASSERT(sizeof(vec) == 100*sizeof(bool), "Fill in the correct value.");
+    ASSERT(sizeof(vec) == sizeof(bool) * ((100 + 7) / 8), "Fill in the correct value.");
     {
         vec[20] = false;
         ASSERT(!vec[20], "Fill in `vec[20]` or `!vec[20]`.");
